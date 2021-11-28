@@ -12,7 +12,8 @@ install(show_locals=True)
 def main():
     console = Console()
     tuning, difficulty = parse_arguments()
-    courses = make_courses(tuning)
+    courses = {number: note for number, note in zip(range(1, 7), tuning)}
+
     while 1:
         note, string = random_note_and_string(tuning, difficulty)
         # print(note, string)
@@ -86,10 +87,6 @@ def random_note_and_string(tuning, difficulty):
     course_number = np.random.randint(1, 7)
     fret_to_play = np.random.randint(minimum, maximum)
     return ((fret_to_play + tuning[course_number - 1]) % 12, course_number)
-
-
-def make_courses(tuning):
-    return {number: note for number, note in zip(range(1, 7), tuning)}
 
 
 if __name__ == "__main__":
