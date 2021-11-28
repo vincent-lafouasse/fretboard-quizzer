@@ -77,7 +77,7 @@ def set_tuning(tuning_choice):
         "E standard": (4, 11, 7, 2, 9, 4,),
         "Drop D": (4, 11, 7, 2, 9, 2,),
     }
-    assert True
+    assert tuning_choice in tunings_dict
     return tunings_dict[tuning_choice]
 
 
