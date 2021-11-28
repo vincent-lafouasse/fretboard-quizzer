@@ -1,16 +1,29 @@
+MODULE=fretboard.py
+LINTER=flake8
+FORMATTER=black
+FFLAGS=-l 79
+TEST_SUITE=test_fretboard.py
+
 all:
-	python fretboard.py 
+	python $(MODULE) 
 
 dropd:
-	python fretboard.py -t "Drop D"
+	python $(MODULE) -t "Drop D"
 
 pep:
-	flake8 fretboard.py
+	$(FORMATTER) $(FFLAGS) $(MODULE)
+	$(LINTER) $(MODULE)
 
 test:
-	pytest test_fretboard.py
+	pytest $(TEST_SUITE)
+
+check:
+	python -m py_compile $(MODULE)
+	$(LINTER) $(MODULE)
+	$(FORMATTER) $(FFLAGS) --diff $(MODULE)
+	
 
 help:
-	python fretboard.py --help
+	python $(MODULE) --help
 
-.PHONY: dropd pop test help
+.PHONY: dropd pep test help check
