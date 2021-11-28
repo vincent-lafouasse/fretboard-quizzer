@@ -12,3 +12,5 @@ test:
 
 help:
 	python fretboard.py --help
+
+.PHONY: dropd pop test help
