@@ -2,9 +2,15 @@
 
 import numpy as np
 import argparse
+from rich.console import Console
+from rich import inspect
+from rich.traceback import install
+
+install(show_locals=True)
 
 
 def main():
+    console = Console()
     tuning, difficulty = parse_arguments()
     courses = make_courses(tuning)
     while 1:
@@ -12,7 +18,12 @@ def main():
         # print(note, string)
         print(f"Where can u fret {NOTES[note]} on string {string}")
         answer = int(input())
-        print((answer + courses[string]) % 12 == note)
+        correction = (answer + courses[string]) % 12 == note
+        console.print(
+            ":thumbsup: [bold blue]Yes !![/bold blue]"
+            if correction
+            else ":thumbsdown: [bold magenta]No...[/bold magenta]"
+        )
 
 
 NOTES = (
