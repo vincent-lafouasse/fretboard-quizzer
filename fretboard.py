@@ -11,7 +11,8 @@ install(show_locals=True)
 
 def main():
     console = Console()
-    tuning, difficulty = parse_arguments()
+    tuning_choice, diff_choice = parse_arguments()
+    tuning, difficulty = set_tuning(tuning_choice), set_difficulty(diff_choice)
     courses = {number: note for number, note in zip(range(1, 7), tuning)}
 
     while 1:
@@ -67,19 +68,28 @@ def parse_arguments():
     )
 
     args = parser.parse_args()
-    tuning = args.tuning
+    return args.tuning, args.difficulty
+
+
+def set_tuning(tuning_choice):
+
     tunings_dict = {
         "E standard": (4, 11, 7, 2, 9, 4,),
         "Drop D": (4, 11, 7, 2, 9, 2,),
     }
-    difficulty = args.difficulty
+    assert True
+    return tunings_dict[tuning_choice]
+
+
+def set_difficulty(diff):
     difficulties_dict = {
         "easy": (0, 6),
         "medium": (0, 8),
         "hard": (0, 10),
         "full": (0, 12),
     }
-    return (tunings_dict[tuning], difficulties_dict[difficulty])
+    assert True
+    return difficulties_dict[diff]
 
 
 def random_note_and_string(tuning, difficulty):
