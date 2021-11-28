@@ -3,6 +3,8 @@ LINTER=flake8
 FORMATTER=black
 FFLAGS=-l 79
 TEST_SUITE=test_fretboard.py
+TEST_FLAGS=--verbose
+TESTER=pytest
 
 all:
 	python $(MODULE) 
@@ -15,7 +17,7 @@ pep:
 	-$(LINTER) $(MODULE)
 
 test:
-	pytest $(TEST_SUITE)
+	$(TESTER) $(TEST_FLAGS) $(TEST_SUITE)
 
 check:
 	-python -m py_compile $(MODULE)
