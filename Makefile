@@ -11,16 +11,16 @@ dropd:
 	python $(MODULE) -t "Drop D"
 
 pep:
-	$(FORMATTER) $(FFLAGS) $(MODULE)
-	$(LINTER) $(MODULE)
+	-$(FORMATTER) $(FFLAGS) $(MODULE)
+	-$(LINTER) $(MODULE)
 
 test:
 	pytest $(TEST_SUITE)
 
 check:
-	python -m py_compile $(MODULE)
-	$(LINTER) $(MODULE)
-	$(FORMATTER) $(FFLAGS) --diff $(MODULE)
+	-python -m py_compile $(MODULE)
+	-$(LINTER) $(MODULE)
+	-$(FORMATTER) $(FFLAGS) --diff $(MODULE)
 	
 
 help:
