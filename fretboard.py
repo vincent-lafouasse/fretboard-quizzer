@@ -7,44 +7,77 @@ from rich import inspect
 from rich.traceback import install
 
 install(show_locals=True)
+console = Console()
 
 
 def main():
-    console = Console()
-    tuning_choice, diff_choice = parse_arguments()
-    tuning, difficulty = set_tuning(tuning_choice), set_difficulty(diff_choice)
-    courses = {number: note for number, note in zip(range(1, 7), tuning)}
-
-    while 1:
-        note, string = random_note_and_string(tuning, difficulty)
-        # print(note, string)
-        print(f"Where can u fret {NOTES[note]} on string {string}")
-        answer = int(input())
-        correction = (answer + courses[string]) % 12 == note
-        console.print(
-            ":thumbsup: [bold blue]Yes !![/bold blue]"
-            if correction
-            else ":thumbsdown: [bold magenta]No...[/bold magenta]"
-        )
+    tuning_choice, difficulty_choice = parse_sysargs()
+    guitar = Guitar(tuning_choice)
+    quiz = Quiz(difficulty_choice)
+    quiz.play(guitar.strings)
 
 
-NOTES = (
-    "C",
-    "C#",
-    "D",
-    "Eb",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "Ab",
-    "A",
-    "Bb",
-    "B",
-)
+class Quiz:
+    def __init__(self, difficulty_choice):
+        self.frets = None
+        self.set_frets(difficulty_choice)
+
+    def play(self, tuning):
+        while 1:
+            rand_fret, rand_string = self.get_random_question()
+            rand_note = (tuning[rand_string] + rand_fret) % 12
+            console.print(
+                f"Where can u fret {NOTES[rand_note]} on string {rand_string}",
+                style="bold green",
+            )
+            guess = get_answer()
+            if guess == 420:
+                return 0
+            console.print(
+                ":thumbsup: [bold blue]Yes !![/bold blue]\n"
+                if rand_fret % 12 == guess % 12
+                else ":thumbsdown: [bold magenta]No...[/bold magenta]\n"
+            )
+
+    def set_frets(self, difficulty_choice):
+        # easy mode uses only frets 0-5
+        # full mode uses all frets
+        difficulties_dict = {
+            "easy": (0, 6),
+            "medium": (0, 8),
+            "hard": (0, 10),
+            "full": (0, 12),
+        }
+        assert difficulty_choice in difficulties_dict
+        self.frets = difficulties_dict[difficulty_choice]
+
+    def get_random_question(self):
+        minimum, maximum = self.frets
+        rand_fret = np.random.randint(minimum, maximum)
+        rand_string = np.random.randint(1, 7)
+        return rand_fret, rand_string
 
 
-def parse_arguments():
+class Guitar:
+    def __init__(self, tuning_name):
+        self.strings = None
+        self.set_tuning(tuning_name)
+
+    def set_tuning(self, tuning_name):
+        tunings_dict = {
+            "E standard": (4, 11, 7, 2, 9, 4,),
+            "Drop D": (4, 11, 7, 2, 9, 2,),
+        }
+        assert tuning_name in tunings_dict
+        self.strings = {
+            str_number: str_note
+            for (str_number, str_note) in enumerate(
+                tunings_dict[tuning_name], 1
+            )
+        }
+
+
+def parse_sysargs():
     parser = argparse.ArgumentParser(
         description="Test your knowledge of the guitar fretboard"
     )
@@ -71,33 +104,44 @@ def parse_arguments():
     return args.tuning, args.difficulty
 
 
-def set_tuning(tuning_choice):
+def get_answer():
+    while True:
+        answer = input()
 
-    tunings_dict = {
-        "E standard": (4, 11, 7, 2, 9, 4,),
-        "Drop D": (4, 11, 7, 2, 9, 2,),
-    }
-    assert tuning_choice in tunings_dict
-    return tunings_dict[tuning_choice]
+        if str(answer) == "exit":
+            return 420
+        
+        try:
+            guess = int(answer)
+            pass
+        except ValueError:
+            console.print("bruh", style='red')
+            continue
+        if guess not in range(25):
+            console.print("bruh", style='red')
+            continue
+        else:
+            break
+
+    assert isinstance(guess, int)
+    assert guess in range(25)
+    return guess
 
 
-def set_difficulty(diff):
-    difficulties_dict = {
-        "easy": (0, 6),
-        "medium": (0, 8),
-        "hard": (0, 10),
-        "full": (0, 12),
-    }
-    assert True
-    return difficulties_dict[diff]
-
-
-def random_note_and_string(tuning, difficulty):
-    minimum, maximum = difficulty
-    course_number = np.random.randint(1, 7)
-    fret_to_play = np.random.randint(minimum, maximum)
-    return ((fret_to_play + tuning[course_number - 1]) % 12, course_number)
-
+NOTES = (
+    "C",
+    "C#",
+    "D",
+    "Eb",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "Ab",
+    "A",
+    "Bb",
+    "B",
+)
 
 if __name__ == "__main__":
     main()
