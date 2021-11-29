@@ -59,6 +59,13 @@ class Quiz:
 
 
 class Guitar:
+    """
+    only attribute of Guitar objects is their tuning in self.strings
+    stored as a dictionary with:
+    keys are the index of the string (eg second string)
+    values are the tuning of said string, with 0 means C, 1 means Db etc
+    """
+
     def __init__(self, tuning_name):
         self.strings = None
         self.set_tuning(tuning_name)
@@ -78,6 +85,9 @@ class Guitar:
 
 
 def parse_sysargs():
+    """
+    fetches the options for tuning and playing mode and returns them
+    """
     parser = argparse.ArgumentParser(
         description="Test your knowledge of the guitar fretboard"
     )
@@ -105,20 +115,25 @@ def parse_sysargs():
 
 
 def get_answer():
+    """
+    asks for answer in standard input, checks its validity and returns it
+    answer == 'exit' returns a value that causes Quiz.play() to exit
+    else, keep asking until answer can be cast into int and is in [[0; 24]]
+    """
     while True:
         answer = input()
 
         if str(answer) == "exit":
             return 420
-        
+
         try:
             guess = int(answer)
             pass
         except ValueError:
-            console.print("bruh", style='red')
+            console.print("bruh", style="red")
             continue
         if guess not in range(25):
-            console.print("bruh", style='red')
+            console.print("bruh", style="red")
             continue
         else:
             break
