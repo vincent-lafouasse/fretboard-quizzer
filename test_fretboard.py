@@ -2,6 +2,20 @@ import pytest
 from rich import inspect
 import fretboard as fret
 
+# Quiz class
+
+def test_easy_setting():
+    quiz = fret.Quiz('easy')
+    assert quiz.frets == (0, 6)
+
+def test_hard_setting():
+    quiz = fret.Quiz('hard')
+    assert quiz.frets == (0, 10)
+
+def test_invalid_setting():
+    with pytest.raises(AssertionError) as exc_info:
+        quiz = fret.Quiz('why am i here i play the trombone')
+
 # Guitar class
 def test_E_standard():
     guitar = fret.Guitar('E standard')
