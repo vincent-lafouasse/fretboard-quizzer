@@ -66,7 +66,7 @@ class Guitar:
     values are the tuning of said string, with 0 means C, 1 means Db etc
     """
 
-    def __init__(self, tuning_name):
+    def __init__(self, tuning_name="E standard"):
         self.strings = None
         self.set_tuning(tuning_name)
 
