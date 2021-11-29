@@ -46,7 +46,7 @@ class Quiz:
             "easy": (0, 6),
             "medium": (0, 8),
             "hard": (0, 10),
-            "full": (0, 12),
+            "full": (0, 11),
         }
         assert difficulty_choice in difficulties_dict
         self.frets = difficulties_dict[difficulty_choice]
