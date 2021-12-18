@@ -16,6 +16,11 @@ def test_quiz_invalid_setting():
     with pytest.raises(AssertionError) as exc_info:
         quiz = fret.Quiz('why am i here i play the trombone')
 
+def test_quiz_change_diff():
+    quiz = fret.Quiz('easy')
+    quiz.set_frets('full')
+    assert quiz.frets == (0, 11)
+
 # Guitar class
 def test_guitar_E_standard():
     guitar = fret.Guitar('E standard')
@@ -50,6 +55,12 @@ def test_guitar_string_dict():
             5: 9,
             6: 4,}
     assert guitar.strings == expected
+
+# Global scope functions and variables
+def test_global_notes():
+    expected_notes = ("C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B")
+    assert fret.NOTES == expected_notes
+
 
 if __name__ == '__main__':
     test_invalid_tuning()
